@@ -28,7 +28,7 @@ jobs:
           $Version = "latest"
           $Sig = "ucorpcpcacg" 
           $SigImageDefName = "Ucorp-CPC-Image"
-          $ManagedIdenityName = "ucorp-aib-mi"
+          $ManagedIdenityName = "ucorp-aib-cpc-mi"
           $imageRoleDefName = "Azure Image Builder"
 
           # Get the PowerShell modules
