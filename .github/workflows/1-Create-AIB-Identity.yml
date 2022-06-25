@@ -26,7 +26,7 @@ jobs:
           $Offer = "windows-ent-cpc"
           $Sku = "win10-21h2-ent-cpc-os-g2"
           $Version = "latest"
-          $Sig = "ucorpcpcacg" 
+          $Sig = "ucorpcpcsig" 
           $SigImageDefName = "Ucorp-CPC-Image"
           $ManagedIdenityName = "ucorp-aib-cpc-mi"
           $imageRoleDefName = "Azure Image Builder"
@@ -63,7 +63,7 @@ jobs:
           $jsonARMTemplateFile = [string]($env:TEMP + "\1-ARM-Create-AIB-Identity.json")
 
           # storage location for custom ARM template
-          $templateUrl="https://raw.githubusercontent.com/iuenk/AVD/main/ARMTemplates/1-ARM-Create-AIB-Identity.json"
+          $templateUrl="https://raw.githubusercontent.com/iuenk/CPC/main/ARMTemplates/1-ARM-Create-AIB-Identity.json"
           
           # Download the file
           Invoke-WebRequest -Uri $templateUrl -OutFile $jsonARMTemplateFile -UseBasicParsing
