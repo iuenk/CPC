@@ -29,7 +29,7 @@ jobs:
           $Sig = "ucorpcpcsig" 
           $SigImageDefName = "Ucorp-CPC-Image"
           $ManagedIdenityName = "ucorp-aib-cpc-mi"
-          $imageRoleDefName = "Azure Image Builder"
+          $imageRoleDefName = "Azure Image Builder CPC"
 
           # Get the PowerShell modules
           'Az.ImageBuilder', 'Az.ManagedServiceIdentity' | ForEach-Object {Install-Module -Name $_ -AllowClobber -Force}
