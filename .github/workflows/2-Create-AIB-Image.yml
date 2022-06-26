@@ -1,4 +1,4 @@
-name: 2-Create-AIB-Image-Personal
+name: 2-Create-AIB-Image
 on: workflow_dispatch
 
 env:
@@ -6,14 +6,14 @@ env:
 
 jobs:
   build:
-    name: 2-Create-AIB-Image-Personal
+    name: 2-Create-AIB-Image
     runs-on: windows-2022
     steps:
     # Authentication: log on to Azure with the AZURE_AVD_SP secret
     - name: Login via Az module
       uses: azure/login@v1
       with:
-        creds: ${{secrets.AZURE_AVD_SP}}
+        creds: ${{secrets.AZURE_AUTOMATION_SP}}
         enable-AzPSSession: true 
     
     # Azure PowerShell: Run inline script    
@@ -23,19 +23,19 @@ jobs:
         inlineScript: |
           # Read the environment variables in PowerShell
           $Tags = @{"Environment"="PRD"}
-          $ResourceGroup = "Ucorp-AVD-RG"
+          $ResourceGroup = "Ucorp-CPC-RG"
           $ApiVersion = "2020-02-14"
           $Publisher = "Microsoftwindowsdesktop"
-          $Offer = "windows-10"
-          $Sku = "20h2-ent"
+          $Offer = "windows-ent-cpc"
+          $Sku = "win10-21h2-ent-cpc-os-g2"
           $Version = "latest"
-          $Sig = "ucorpavdtest" 
-          $SigImageDefName = "Ucorp-AVD-Personal-Image"
-          $ManagedIdenityName = "ucorp-aib-mi"
+          $Sig = "ucorpcpcsig"
+          $SigImageDefName = "Ucorp-CPC-Image"
+          $ManagedIdenityName = "ucorp-aib-cpc-mi"
           $Date = Get-Date -format "yyyyMMdd"
-          $imageTemplateName = "W10-PERSONAL-$($Date)"
-          $BaselineLanguage = "https://raw.githubusercontent.com/iuenk/AVD/main/AIB/Ucorp-Personal-Baseline-Language.ps1"
-          $BaselineConfiguration = "https://raw.githubusercontent.com/iuenk/AVD/main/AIB/Ucorp-Personal-Baseline-Configuration.ps1"
+          $imageTemplateName = "W10-CPC-$($Date)"
+          $BaselineLanguage = "https://raw.githubusercontent.com/iuenk/CPC/main/AIB/Ucorp-CPC-Baseline-Language.ps1"
+          $BaselineConfiguration = "https://raw.githubusercontent.com/iuenk/CPC/main/AIB/Ucorp-CPC-Baseline-Configuration.ps1"
           $galleryImageId = "/subscriptions/${{secrets.AZURE_SUBSCRIPTIONID}}/resourceGroups/$ResourceGroup/providers/Microsoft.Compute/galleries/$Sig/images/$SigImageDefName"
           $imgBuilderId = "/subscriptions/${{secrets.AZURE_SUBSCRIPTIONID}}/resourcegroups/$ResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$ManagedIdenityName"
 
@@ -52,7 +52,7 @@ jobs:
           $jsonARMTemplateFile = [string]($env:TEMP + "\2-ARM-Create-AVD-Image-Personal.json")
                 
           # storage location for custom ARM template
-          $templateUrl="https://raw.githubusercontent.com/iuenk/AVD/main/ARMTemplates/2-ARM-Create-AVD-Image-Personal.json"
+          $templateUrl="https://raw.githubusercontent.com/iuenk/CPC/main/ARMTemplates/2-ARM-Create-Image.json"
 
           # Retrieve the template file and save it in a temp file location
           Invoke-WebRequest -Uri $templateUrl -OutFile $jsonARMTemplateFile -UseBasicParsing
