@@ -41,8 +41,8 @@
 
             "vmProfile": 
                     {
-                    "vmSize": "Standard_D4s_v3",
-                    "osDiskSizeGB": 127
+                    "vmSize": "Standard_B2s",
+                    "osDiskSizeGB": 64
                     },
         
             "source": {
@@ -55,18 +55,6 @@
             "customize": [
 
         
-                    {
-                        "type": "PowerShell",
-                        "name": "ConfigureBaseline",
-                        "runElevated": true,
-                        "runAsSystem": true,
-                        "scriptUri": "<BaselineLanguage>"
-                    },
-                    {
-                        "type": "WindowsRestart",
-                        "restartCheckCommand": "write-host 'Restarting for language configuration'",
-                        "restartTimeout": "5m"
-                    },
                     {
                         "type": "PowerShell",
                         "name": "ConfigureBaseline",

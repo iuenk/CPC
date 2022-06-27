@@ -34,7 +34,6 @@ jobs:
           $ManagedIdenityName = "ucorp-aib-cpc-mi"
           $Date = Get-Date -format "yyyyMMdd"
           $imageTemplateName = "W10-CPC-$($Date)"
-          $BaselineLanguage = "https://raw.githubusercontent.com/iuenk/CPC/main/AIB/Ucorp-CPC-Baseline-Language.ps1"
           $BaselineConfiguration = "https://raw.githubusercontent.com/iuenk/CPC/main/AIB/Ucorp-CPC-Baseline-Configuration.ps1"
           $galleryImageId = "/subscriptions/${{secrets.AZURE_SUBSCRIPTIONID}}/resourceGroups/$ResourceGroup/providers/Microsoft.Compute/galleries/$Sig/images/$SigImageDefName"
           $imgBuilderId = "/subscriptions/${{secrets.AZURE_SUBSCRIPTIONID}}/resourcegroups/$ResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$ManagedIdenityName"
@@ -64,7 +63,6 @@ jobs:
           ((Get-Content -path $jsonARMTemplateFile -Raw) -replace '<runOutputName>',$AIBImageVersion) | Set-Content -Path $jsonARMTemplateFile
           ((Get-Content -path $jsonARMTemplateFile -Raw) -replace '<galleryImageId>',$galleryImageId) | Set-Content -Path $jsonARMTemplateFile
           ((Get-Content -path $jsonARMTemplateFile -Raw) -replace '<imgBuilderId>',$imgBuilderId) | Set-Content -Path $jsonARMTemplateFile
-          ((Get-Content -path $jsonARMTemplateFile -Raw) -replace '<BaselineLanguage>',$BaselineLanguage) | Set-Content -Path $jsonARMTemplateFile
           ((Get-Content -path $jsonARMTemplateFile -Raw) -replace '<BaselineConfiguration>',$BaselineConfiguration) | Set-Content -Path $jsonARMTemplateFile
 
           ## Create a Template Parameter Object (hashtable)

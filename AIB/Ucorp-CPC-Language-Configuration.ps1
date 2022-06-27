@@ -12,7 +12,7 @@ $path = "c:\AIB"
 mkdir $path
 
 #Creating logoutput and filenames
-$LogFile = $path + "\" + "Language-Personal-Configuration-" + (Get-Date -UFormat "%d-%m-%Y") + ".log"
+$LogFile = $path + "\" + "CPC-Language-Configuration-" + (Get-Date -UFormat "%d-%m-%Y") + ".log"
 
 Function Write-Log
 {
@@ -81,29 +81,6 @@ try {
 catch {
     $ErrorMessage = $_.Exception.message
     Write-Log -LogOutput ("Error adding teams registry KEY: $ErrorMessage") -Path $LogFile
-}
-
-# Update installed Inbox Store Apps added in this step because language is changed to nl-NL
-$lp_root_folder = "$path\Language"
-foreach ($App in (Get-AppxProvisionedPackage -Online)) {
-	$AppPath = $lp_root_folder + "\APP\" + $App.DisplayName + '_' + $App.PublisherId
-	Write-Log -LogOutput ("Handling $AppPath") -Path $LogFile
-	$licFile = Get-Item $AppPath*.xml
-	if ($licFile.Count) {
-		$lic = $true
-		$licFilePath = $licFile.FullName
-	} else {
-		$lic = $false
-	}
-	$appxFile = Get-Item $AppPath*.appx*
-	if ($appxFile.Count) {
-		$appxFilePath = $appxFile.FullName
-		if ($lic) {
-			Add-AppxProvisionedPackage -Online -PackagePath $appxFilePath -LicensePath $licFilePath 
-		} else {
-			Add-AppxProvisionedPackage -Online -PackagePath $appxFilePath -skiplicense
-		}
-	}
 }
 
 # Configure language settings for Current user > Welcome screen > New accounts

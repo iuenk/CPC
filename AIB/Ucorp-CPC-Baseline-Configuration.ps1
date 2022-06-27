@@ -10,7 +10,7 @@
 
 # Creating logoutput and filenames
 $path = "c:\AIB"
-$LogFile = $path + "\" + "Baseline-Configuration-Personal-" + (Get-Date -UFormat "%d-%m-%Y") + ".log"
+$LogFile = $path + "\" + "CPC-Baseline-Configuration-" + (Get-Date -UFormat "%d-%m-%Y") + ".log"
 
 Function Write-Log
 {
@@ -62,38 +62,11 @@ Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/p/?LinkID=844652&clcid=0
 Invoke-Expression -command 'C:\AIB\OneDriveSetup.exe /allusers'
 Start-Sleep -Seconds 60
 
-# Install FSLogix agent
-$ErrorActionPreference = 'SilentlyContinue'
-
-$fsLogixURL = "https://aka.ms/fslogix_download"
-$installerFile = "fslogix_download.zip"
-
-Try
-{
-    Invoke-WebRequest $fsLogixURL -OutFile $path\$installerFile
-    Expand-Archive $path\$installerFile -DestinationPath $path\fsLogix\extract
-    Start-Process -FilePath $path\fsLogix\extract\x64\Release\FSLogixAppsSetup.exe -Args "/install /quiet /norestart" -Wait
-    Write-Log -LogOutput ("Fslogix Install Succeeded") -Path $LogFile
-}
-Catch
-{
-    Write-Log -LogOutput ("Fslogix Install Failed") -Path $LogFile
-    $ErrorMessage = $_.Exception.Message
-    Write-Log -LogOutput ($ErrorMessage) -Path $LogFile
-    $FailedItem = $_.Exception.ItemName
-    Write-Log -LogOutput ($FailedItem) -Path $LogFile
-}
-
 # Set Wallpaper
 Write-Log -LogOutput ("Set Wallpaper") -Path $LogFile
 $WallpaperUrl = 'https://github.com/iuenk/AVD/raw/main/AIB/Ucorp-Wallpaper.jpg'
 $WallpaperLocation = 'C:\Windows\Web\Wallpaper\Ucorp-Wallpaper.jpg'
 Invoke-WebRequest -Uri $WallpaperUrl -OutFile $WallpaperLocation
-
-# Add MSIX app attach certificate
-Write-Log -LogOutput ("Set MSIX app attach certificate") -Path $LogFile
-Invoke-WebRequest -Uri 'https://github.com/iuenk/AVD/raw/main/AIB/Ucorp-MSIX-20092021.pfx' -OutFile "$path\Ucorp-MSIX-20092021.pfx"
-Import-PfxCertificate -FilePath "$path\Ucorp-MSIX-20092021.pfx" -CertStoreLocation 'Cert:\LocalMachine\TrustedPeople' -Password (ConvertTo-SecureString -String 'Welkom01!' -AsPlainText -Force) -Exportable
 
 # Turn off Teams startup for HKLM will also be done with User GPO
 Write-Log -LogOutput ("Remove Teams from startup apps") -Path $LogFile
