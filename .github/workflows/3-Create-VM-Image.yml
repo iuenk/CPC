@@ -27,18 +27,18 @@ jobs:
           $sourceImgVer = Get-AzGalleryImageVersion -GalleryImageDefinitionName $SigImageDefName -GalleryName $Sig -ResourceGroupName $ResourceGroup |
           Select-Object -Last 1
 
-          # Check if VM Image Version already exists if not start procedure
+          # Check if Image already exists if not start procedure
           Try 
           {
               Get-AzDisk -ResourceGroupName $ResourceGroup -DiskName $sourceImgVer.Name -ErrorAction Stop
           } 
           Catch 
           {
-              # Create Managed Disk from ACG Image
+              # Create Managed Disk from ACG Image Version
               $diskConfig = New-AzDiskConfig -Location "westeurope" -CreateOption FromImage -GalleryImageReference @{Id = $sourceImgVer.Id}
               New-AzDisk -Disk $diskConfig -ResourceGroupName $ResourceGroup -DiskName $sourceImgVer.Name
 
-              # create an VM Image Version from Managed Disk
+              # create an Image from Managed Disk
               $CustomDisk = Get-AzDisk -ResourceGroupName $ResourceGroup -DiskName $sourceImgVer.Name
               $imageConfig = New-AzImageConfig -Location "westeurope" -HyperVGeneration V2
               $imageConfig = Set-AzImageOsDisk -Image $imageConfig -OsState Generalized -OsType Windows -ManagedDiskId $CustomDisk.Id
