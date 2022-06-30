@@ -10,7 +10,7 @@ jobs:
     - name: Login via Az module
       uses: azure/login@v1
       with:
-        creds: ${{secrets.AZURE_AVD_SP}}
+        creds: ${{secrets.AZURE_AUTOMATION_SP}}
         enable-AzPSSession: true 
     
     # Azure PowerShell: Run inline script    
