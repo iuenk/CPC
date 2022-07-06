@@ -47,7 +47,6 @@ catch {
     Write-Log -LogOutput ("Error adding teams registry KEY: $ErrorMessage") -Path $LogFile
 }
 
-Set-ExecutionPolicy Bypass -Scope Process -Force
 Invoke-Expression ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 
 choco install adobereader -params '"/NoUpdates"' -y
